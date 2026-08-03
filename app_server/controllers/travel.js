@@ -1,15 +1,22 @@
-var fs = require('fs');
+var travel = async function(req, res) {
+  try {
+    var response = await fetch('http://localhost:3000/api/trips');
 
-var trips = JSON.parse(
-  fs.readFileSync('./data/trips.json', 'utf8')
-);
+    if (!response.ok) {
+      throw new Error('Trip API returned status ' + response.status);
+    }
 
-var travel = function(req, res) {
-  res.render('travel', {
-    title: 'Dive Sites - Bhaccasyoniztas Beach Resort Website Template',
-    trips: trips,
-    layout: false
-  });
+    var trips = await response.json();
+
+    return res.render('travel', {
+      title: 'Dive Sites - Bhaccasyoniztas Beach Resort Website Template',
+      trips: trips,
+      layout: false
+    });
+  } catch (err) {
+    console.error('Unable to load trips from the API:', err);
+    return res.status(500).send('Unable to load travel information.');
+  }
 };
 
 module.exports = {
