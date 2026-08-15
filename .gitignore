@@ -67,3 +67,8 @@ typings/
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+
+# Angular build and tooling output
+app_admin/.angular/
+app_admin/dist/
+app_admin/node_modules/

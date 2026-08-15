@@ -1,0 +1,9 @@
+.trip-card { border: 1px solid #d8dee5; border-radius: 8px; box-shadow: 0 5px 18px rgba(24, 40, 51, .08); overflow: hidden; }
+.card-img-top { height: 210px; object-fit: cover; }
+.card-title { color: #173f4f; }
+.trip-code { background: #e7f1f1; color: #176b68; font-size: .75rem; font-weight: 700; padding: .35rem .5rem; border-radius: 4px; white-space: nowrap; }
+.resort { color: #63727b; font-weight: 600; }
+.trip-facts { font-size: .92rem; }
+.trip-facts dt { color: #63727b; }
+.trip-facts dd { margin-bottom: .35rem; }
+.price { color: #176b68; font-weight: 700; }

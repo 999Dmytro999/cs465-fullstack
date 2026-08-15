@@ -1,0 +1,20 @@
+<header class="admin-header">
+  <nav class="navbar navbar-expand-lg navbar-dark container" aria-label="Administrator navigation">
+    <a class="navbar-brand" routerLink="/trips">
+      <span class="brand-mark">T</span>
+      <span>Travlr Getaways <small>Administration</small></span>
+    </a>
+    <div class="ms-auto d-flex gap-2">
+      <a class="btn btn-outline-light" routerLink="/trips" routerLinkActive="active">Trips</a>
+      <a class="btn btn-warning" routerLink="/add-trip">Add Trip</a>
+    </div>
+  </nav>
+</header>
+
+<main class="container py-4 py-lg-5">
+  <router-outlet />
+</main>
+
+<footer class="admin-footer">
+  <div class="container">Travlr Getaways trip management</div>
+</footer>

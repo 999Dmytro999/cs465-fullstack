@@ -24,6 +24,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Permit the local Angular administrator SPA to use the REST API.
+app.use('/api', function(req, res, next) {
+  if (req.headers.origin === 'http://localhost:4200') {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+  }
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
 app.use('/', indexRouter);
 app.use('/travel', travelRouter);
 app.use('/users', usersRouter);

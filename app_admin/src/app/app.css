@@ -1,0 +1,6 @@
+.admin-header { background: #153f4f; border-bottom: 4px solid #eead37; }
+.navbar { min-height: 78px; }
+.navbar-brand { display: flex; align-items: center; gap: .75rem; font-weight: 700; }
+.navbar-brand small { display: block; color: #b9ced3; font-size: .72rem; font-weight: 500; }
+.brand-mark { align-items: center; background: #eead37; border-radius: 4px; color: #153f4f; display: inline-flex; font-size: 1.35rem; height: 38px; justify-content: center; width: 38px; }
+.admin-footer { border-top: 1px solid #d8dee5; color: #667780; font-size: .9rem; padding: 1.25rem 0; }

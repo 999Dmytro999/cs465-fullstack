@@ -1,0 +1,6 @@
+.form-page { max-width: 920px; margin: 0 auto; }
+.form-page h1 { color: #173f4f; font-weight: 700; }
+.eyebrow { color: #c5522d; font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.trip-form { background: #fff; border: 1px solid #d8dee5; border-radius: 8px; box-shadow: 0 5px 18px rgba(24, 40, 51, .08); padding: 1.5rem; }
+.form-label { color: #314b57; font-weight: 700; }
+.validation-message { color: #b02a37; font-weight: 600; }

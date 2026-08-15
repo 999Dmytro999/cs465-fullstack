@@ -1,0 +1,21 @@
+<section class="form-page">
+  <div class="mb-4"><p class="eyebrow mb-1">Trip inventory</p><h1>Edit Trip</h1><p class="text-secondary">Update the selected getaway.</p></div>
+  @if (loading) { <div class="alert alert-info">Loading trip...</div> }
+  @if (errorMessage) { <div class="alert alert-danger">{{ errorMessage }}</div> }
+  @if (!loading) {
+    <form class="trip-form" [formGroup]="tripForm" (ngSubmit)="submit()">
+      <div class="row g-3">
+        <div class="col-md-4"><label for="code" class="form-label">Trip code</label><input id="code" class="form-control" formControlName="code" /></div>
+        <div class="col-md-8"><label for="name" class="form-label">Name</label><input id="name" class="form-control" formControlName="name" /></div>
+        <div class="col-md-4"><label for="length" class="form-label">Length</label><input id="length" class="form-control" formControlName="length" /></div>
+        <div class="col-md-4"><label for="start" class="form-label">Start date</label><input id="start" type="date" class="form-control" formControlName="start" /></div>
+        <div class="col-md-4"><label for="perPerson" class="form-label">Price per person</label><input id="perPerson" class="form-control" formControlName="perPerson" /></div>
+        <div class="col-md-8"><label for="resort" class="form-label">Resort</label><input id="resort" class="form-control" formControlName="resort" /></div>
+        <div class="col-md-4"><label for="image" class="form-label">Image filename</label><input id="image" class="form-control" formControlName="image" /></div>
+        <div class="col-12"><label for="description" class="form-label">Description</label><textarea id="description" rows="4" class="form-control" formControlName="description"></textarea></div>
+      </div>
+      @if (tripForm.invalid && tripForm.touched) { <p class="validation-message mt-3 mb-0">Complete every field before saving.</p> }
+      <div class="d-flex gap-2 mt-4"><button class="btn btn-primary" type="submit" [disabled]="submitting">{{ submitting ? 'Saving...' : 'Save Changes' }}</button><a class="btn btn-outline-secondary" routerLink="/trips">Cancel</a></div>
+    </form>
+  }
+</section>
