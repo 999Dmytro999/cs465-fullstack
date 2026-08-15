@@ -11,6 +11,7 @@ import { Trip } from '../../models/trip';
 })
 export class TripCardComponent {
   @Input({ required: true }) trip!: Trip;
+  @Input() canEdit = false;
   @Output() remove = new EventEmitter<string>();
 
   get imageUrl(): string {

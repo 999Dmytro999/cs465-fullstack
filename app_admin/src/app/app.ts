@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthenticationService } from './services/authentication';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,14 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {}
+export class App {
+  constructor(
+    public readonly authenticationService: AuthenticationService,
+    private readonly router: Router
+  ) {}
+
+  logout(): void {
+    this.authenticationService.logout();
+    this.router.navigate(['/login']);
+  }
+}

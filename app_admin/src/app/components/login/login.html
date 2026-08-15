@@ -1,0 +1,28 @@
+<section class="login-page">
+  <div class="login-panel">
+    <p class="eyebrow mb-1">Secure administration</p>
+    <h1>Administrator Login</h1>
+    <p class="text-secondary mb-4">Sign in to manage Travlr Getaways trip inventory.</p>
+
+    @if (errorMessage) {
+      <div class="alert alert-danger" role="alert">{{ errorMessage }}</div>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="submit()">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input id="email" type="email" class="form-control" formControlName="email" autocomplete="username" />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input id="password" type="password" class="form-control" formControlName="password" autocomplete="current-password" />
+      </div>
+      @if (loginForm.invalid && loginForm.touched) {
+        <p class="validation-message">Enter a valid email address and password.</p>
+      }
+      <button class="btn btn-primary w-100" type="submit" [disabled]="submitting">
+        {{ submitting ? 'Signing in...' : 'Login' }}
+      </button>
+    </form>
+  </div>
+</section>

@@ -6,7 +6,12 @@
     </a>
     <div class="ms-auto d-flex gap-2">
       <a class="btn btn-outline-light" routerLink="/trips" routerLinkActive="active">Trips</a>
-      <a class="btn btn-warning" routerLink="/add-trip">Add Trip</a>
+      @if (authenticationService.isLoggedIn()) {
+        <a class="btn btn-warning" routerLink="/add-trip">Add Trip</a>
+        <button class="btn btn-outline-light" type="button" (click)="logout()">Logout</button>
+      } @else {
+        <a class="btn btn-warning" routerLink="/login" routerLinkActive="active">Login</a>
+      }
     </div>
   </nav>
 </header>

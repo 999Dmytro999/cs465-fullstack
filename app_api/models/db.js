@@ -50,5 +50,6 @@ process.on('SIGTERM', () => {
 });
 
 require('./travlr');
+require('./user');
 
 module.exports = mongoose;

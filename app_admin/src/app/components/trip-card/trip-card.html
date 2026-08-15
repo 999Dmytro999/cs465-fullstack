@@ -12,9 +12,11 @@
       <dt class="col-5">Per person</dt><dd class="col-7 price">{{ trip.perPerson }}</dd>
     </dl>
     <p class="card-text flex-grow-1">{{ trip.description }}</p>
-    <div class="d-flex gap-2 mt-3">
-      <a class="btn btn-primary flex-grow-1" [routerLink]="['/edit-trip', trip.code]">Edit trip</a>
-      <button class="btn btn-outline-danger" type="button" (click)="remove.emit(trip.code)">Delete</button>
-    </div>
+    @if (canEdit) {
+      <div class="d-flex gap-2 mt-3">
+        <a class="btn btn-primary flex-grow-1" [routerLink]="['/edit-trip', trip.code]">Edit trip</a>
+        <button class="btn btn-outline-danger" type="button" (click)="remove.emit(trip.code)">Delete</button>
+      </div>
+    }
   </div>
 </article>
