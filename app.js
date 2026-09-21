@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var hbs = require('hbs');
 var passport = require('passport');
+var environment = require('./app_api/config/environment');
+var apiErrorHandler = require('./app_api/utils/api-errors').apiErrorHandler;
 
 require('./app_api/models/db');
 require('./app_api/config/passport');
@@ -15,6 +17,7 @@ var travelRouter = require('./app_server/routes/travel');
 var apiRouter = require('./app_api/routes/index');
 
 var app = express();
+var clientOrigins = new Set(environment.getClientOrigins());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app_server', 'views'));
@@ -27,15 +30,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(passport.initialize());
 
-// Permit the local Angular administrator SPA to use the REST API.
+// Permit configured administrator clients to use the REST API.
 app.use('/api', function(req, res, next) {
-  if (req.headers.origin === 'http://localhost:4200') {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
+  var requestOrigin = req.get('Origin');
+
+  if (requestOrigin && clientOrigins.has(requestOrigin)) {
+    res.header('Access-Control-Allow-Origin', requestOrigin);
     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.vary('Origin');
   }
 
   if (req.method === 'OPTIONS') {
+    if (requestOrigin && !clientOrigins.has(requestOrigin)) {
+      return res.status(403).json({ message: 'This client origin is not allowed.' });
+    }
+
     return res.sendStatus(204);
   }
 
@@ -46,6 +56,7 @@ app.use('/', indexRouter);
 app.use('/travel', travelRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
+app.use('/api', apiErrorHandler);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler

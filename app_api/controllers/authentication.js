@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const User = mongoose.model('User');
+const { sendClientError, sendInternalError } = require('../utils/api-errors');
 
 const register = async (req, res) => {
   const name = String(req.body.name || '').trim();
@@ -29,13 +30,16 @@ const register = async (req, res) => {
     }
 
     if (err.name === 'ValidationError') {
-      return res.status(400).json({ message: err.message });
+      return sendClientError(
+        res,
+        400,
+        'The registration information is invalid.',
+        err,
+        'Registration validation failed'
+      );
     }
 
-    return res.status(500).json({
-      message: 'Unable to register the user.',
-      error: err.message
-    });
+    return sendInternalError(res, 'Unable to register the user.', err, 'User registration failed');
   }
 };
 

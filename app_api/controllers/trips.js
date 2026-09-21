@@ -1,30 +1,14 @@
 const mongoose = require('mongoose');
 const Trip = mongoose.model('trips');
-
-const requiredFields = [
-  'code',
-  'name',
-  'length',
-  'start',
-  'resort',
-  'perPerson',
-  'image',
-  'description'
-];
-
-const missingFields = (body) => requiredFields.filter((field) => {
-  return body[field] === undefined || body[field] === null || String(body[field]).trim() === '';
-});
+const { buildTripPayload } = require('../middleware/trip-validation');
+const { sendClientError, sendInternalError } = require('../utils/api-errors');
 
 const tripsList = async (req, res) => {
   try {
     const trips = await Trip.find({});
     return res.status(200).json(trips);
   } catch (err) {
-    return res.status(500).json({
-      message: 'Unable to retrieve trips.',
-      error: err.message
-    });
+    return sendInternalError(res, 'Unable to retrieve trips.', err, 'Listing trips failed');
   }
 };
 
@@ -40,21 +24,11 @@ const tripsFindByCode = async (req, res) => {
 
     return res.status(200).json(trips[0]);
   } catch (err) {
-    return res.status(500).json({
-      message: 'Unable to retrieve the trip.',
-      error: err.message
-    });
+    return sendInternalError(res, 'Unable to retrieve the trip.', err, 'Finding a trip failed');
   }
 };
 
 const tripsAddTrip = async (req, res) => {
-  const missing = missingFields(req.body);
-  if (missing.length > 0) {
-    return res.status(400).json({
-      message: `Missing required fields: ${missing.join(', ')}.`
-    });
-  }
-
   try {
     const existingTrip = await Trip.findOne({ code: req.body.code });
     if (existingTrip) {
@@ -63,38 +37,19 @@ const tripsAddTrip = async (req, res) => {
       });
     }
 
-    const trip = await Trip.create({
-      code: req.body.code,
-      name: req.body.name,
-      length: req.body.length,
-      start: req.body.start,
-      resort: req.body.resort,
-      perPerson: req.body.perPerson,
-      image: req.body.image,
-      description: req.body.description
-    });
+    const trip = await Trip.create(buildTripPayload(req.body));
 
     return res.status(201).json(trip);
   } catch (err) {
     if (err.name === 'ValidationError' || err.name === 'CastError') {
-      return res.status(400).json({ message: err.message });
+      return sendClientError(res, 400, 'Invalid trip data.', err, 'Trip creation validation failed');
     }
 
-    return res.status(500).json({
-      message: 'Unable to create the trip.',
-      error: err.message
-    });
+    return sendInternalError(res, 'Unable to create the trip.', err, 'Creating a trip failed');
   }
 };
 
 const tripsUpdateTrip = async (req, res) => {
-  const missing = missingFields(req.body);
-  if (missing.length > 0) {
-    return res.status(400).json({
-      message: `Missing required fields: ${missing.join(', ')}.`
-    });
-  }
-
   try {
     const trip = await Trip.findOne({ code: req.params.tripCode });
     if (!trip) {
@@ -112,21 +67,16 @@ const tripsUpdateTrip = async (req, res) => {
       }
     }
 
-    requiredFields.forEach((field) => {
-      trip[field] = req.body[field];
-    });
+    Object.assign(trip, buildTripPayload(req.body));
 
     const updatedTrip = await trip.save();
     return res.status(200).json(updatedTrip);
   } catch (err) {
     if (err.name === 'ValidationError' || err.name === 'CastError') {
-      return res.status(400).json({ message: err.message });
+      return sendClientError(res, 400, 'Invalid trip data.', err, 'Trip update validation failed');
     }
 
-    return res.status(500).json({
-      message: 'Unable to update the trip.',
-      error: err.message
-    });
+    return sendInternalError(res, 'Unable to update the trip.', err, 'Updating a trip failed');
   }
 };
 
@@ -144,10 +94,7 @@ const tripsDeleteTrip = async (req, res) => {
       trip: trip
     });
   } catch (err) {
-    return res.status(500).json({
-      message: 'Unable to delete the trip.',
-      error: err.message
-    });
+    return sendInternalError(res, 'Unable to delete the trip.', err, 'Deleting a trip failed');
   }
 };
 
